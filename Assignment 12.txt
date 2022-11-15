@@ -1,0 +1,71 @@
+package mongoass;
+
+import java.util.Scanner;
+
+import org.bson.Document;
+
+import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+
+public class MONGOCONNECT {
+
+	public static void main(String[] args) {
+		MongoClient mongo = new MongoClient("localhost",27017);
+		MongoDatabase db = mongo.getDatabase("practicals");
+		MongoCollection<Document> collection = db.getCollection("user");
+		//MongoCredential credential = MongoCredential.createCredential("t31337","mongot31337db","t31337db".toCharArray());
+		int flag = 1;
+		int opt = 0;
+		while(flag == 1) {
+			System.out.println("1. Insert \n2. Print \n3. Update \n4. Delete \5.Exit");
+			Scanner sc = new Scanner(System.in);
+			opt = sc.nextInt();
+			switch(opt) {
+			case 1:
+				System.out.print("Enter the name");
+				String nm = sc.next();
+				System.out.print("\nEnter the age");
+				int age = sc.nextInt();
+				
+				Document d = new Document().append("name",nm).append("age",age);
+				
+				collection.insertOne(d);
+				 System.out.print("Data Inserted Successfully");
+			     break;
+			case 2:
+				System.out.println("Displayng Record ");
+				FindIterable <Document> f = collection.find();
+				MongoCursor<Document> m = f.iterator();
+				while(m.hasNext()) {
+					System.out.println(m.next());
+				}
+				break;
+			case 3:
+				System.out.print("Enter the name");
+				nm = sc.next();
+				System.out.print("\nEnter the age");
+				age = sc.nextInt();
+				collection.updateOne(Filters.eq("name",nm), Updates.set("age", age));
+				break;
+			case 4:
+				System.out.print("Enter name to delete");
+				nm=sc.next();
+				collection.deleteOne(Filters.eq("name",nm));
+				System.out.println("Data deleted");
+				break;
+			case 5:
+				System.out.println("Terminating........");
+                flag=0;
+            default :
+            	System.out.println("Enter proper choice ..");
+                break;
+			}
+		}
+	}
+
+}

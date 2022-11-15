@@ -1,0 +1,35 @@
+mysql> delimiter @@
+mysql> create procedure merge_reccords()
+    -> begin
+    -> declare curr_id int default 0;
+    -> declare curr_name varchar(55);
+    -> declare flag int default 0;
+    -> declare cursor_merge cursor for select n_empid,ename from new_emp where n_empid not in (select o_empid from old_emp);
+    -> declare continue handler for not found set flag = 1;
+    -> open cursor_merge;
+    -> lbl : LOOP
+    -> if flag = 1 then
+    -> leave lbl;
+    -> end if;
+    -> fetch cursor_merge into curr_id,curr_name;
+    -> insert into old_emp values (curr_id,curr_name);
+    -> end LOOP lbl;
+    -> close cursor_merge;
+    -> end;
+    -> @@
+Query OK, 0 rows affected (0.03 sec)
+
+
+
+mysql> create procedure clone1(IN empId int(10))
+    -> begin
+    -> DECLARE c1 CURSOR FOR SELECT emp_id FROM O_employ WHERE emp_id=empId;
+    -> OPEN c1;
+    -> FETCH c1 INTO empId;
+    -> if not exists(select * from N_employ where emp_id=empId)
+    -> then
+    -> insert into N_employ select * from O_employ where emp_id=empId;
+    -> end if;
+    -> end;
+    -> //
+Query OK, 0 rows affected (34.82 sec)

@@ -1,0 +1,93 @@
+> var mapfun = function () {emit (this.brand,this.price)}
+> var reducefun = function (key,values) {return Array.sum(values)}
+> db.mobile.mapreduce(mapfun,reducefun,{'out' : 'Result'})
+uncaught exception: TypeError: db.mobile.mapreduce is not a function :
+@(shell):1:1
+> db.mobile.mapReduce(mapfun,reducefun,{'out' : 'Result'})
+{ "result" : "Result", "ok" : 1 }
+> db.Result.find()
+{ "_id" : "One Plus", "value" : 28000 }
+{ "_id" : "Samsung", "value" : 27007 }
+{ "_id" : "Nokia", "value" : 1600 }
+{ "_id" : "Real Me", "value" : 30000 }
+{ "_id" : "Nothing", "value" : 33000 }
+{ "_id" : "Google", "value" : 35000 }
+{ "_id" : "Apple", "value" : 160000 }
+{ "_id" : "Motorola", "value" : 27000 }
+> db.Result.sort({"value" : -1})
+uncaught exception: TypeError: db.Result.sort is not a function :
+@(shell):1:1
+> var reducefun = function (key,values) {return Array.min(values)}
+> db.mobile.mapReduce(mapfun,reducefun,{'out' : 'Result'})
+uncaught exception: Error: map reduce failed:{
+        "ok" : 0,
+        "errmsg" : "MapReduce internal error :: caused by :: TypeError: Array.min is not a function :\n@:1:32\n",
+        "code" : 139,
+        "codeName" : "JSInterpreterFailure"
+} :
+_getErrorWithCode@src/mongo/shell/utils.js:25:13
+DBCollection.prototype.mapReduce@src/mongo/shell/collection.js:1093:15
+@(shell):1:1
+> var reducefun = function (key,values) {return Array.avg(values)}
+> db.mobile.mapReduce(mapfun,reducefun,{'out' : 'Result'})
+{ "result" : "Result", "ok" : 1 }
+> db.Result.find()
+{ "_id" : "Apple", "value" : 80000 }
+{ "_id" : "Motorola", "value" : 27000 }
+{ "_id" : "Google", "value" : 35000 }
+{ "_id" : "Real Me", "value" : 15000 }
+{ "_id" : "Nothing", "value" : 33000 }
+{ "_id" : "Samsung", "value" : 13503.5 }
+{ "_id" : "Nokia", "value" : 1600 }
+{ "_id" : "One Plus", "value" : 28000 }
+> db.mobile.mapReduce(mapfun,reducefun,{'out' : 'Result', 'sort':'Result'})
+uncaught exception: Error: map reduce failed:{
+        "ok" : 0,
+        "errmsg" : "BSON field 'MapReduce.sort' is the wrong type 'string', expected type 'object'",
+        "code" : 14,
+        "codeName" : "TypeMismatch"
+} :
+_getErrorWithCode@src/mongo/shell/utils.js:25:13
+DBCollection.prototype.mapReduce@src/mongo/shell/collection.js:1093:15
+@(shell):1:1
+> var mapfun = function () {emit (this.brand,this.specification.RAM)}
+> var reducefun = function (key,values) {return Array.sum(values)}
+> db.mobile.mapReduce(mapfun,reducefun,{'out' : 'Result'})
+{ "result" : "Result", "ok" : 1 }
+> db.Result.find()
+{ "_id" : "One Plus", "value" : 8 }
+{ "_id" : "Apple", "value" : 12 }
+{ "_id" : "Google", "value" : 6 }
+{ "_id" : "Motorola", "value" : 6 }
+{ "_id" : "Nothing", "value" : 8 }
+{ "_id" : "Real Me", "value" : 10 }
+{ "_id" : "Nokia", "value" : 1 }
+{ "_id" : "Samsung", "value" : 18 }
+> var mapf = function(){emits (this.brand,this.specification.RAM)};
+> var redf = function(key,values) {return Array.sum(values)};
+> db.mobile.mapRedure(mapf,redf,{'out' : 'Result_ram'});
+uncaught exception: TypeError: db.mobile.mapRedure is not a function :
+@(shell):1:1
+> db.mobile.mapReduce(mapf,redf,{'out' : 'Result_ram'});
+uncaught exception: Error: map reduce failed:{
+        "ok" : 0,
+        "errmsg" : "MapReduce internal error :: caused by :: ReferenceError: emits is not defined :\n@:1:13\n",
+        "code" : 139,
+        "codeName" : "JSInterpreterFailure"
+} :
+_getErrorWithCode@src/mongo/shell/utils.js:25:13
+DBCollection.prototype.mapReduce@src/mongo/shell/collection.js:1093:15
+@(shell):1:1
+> var mapf = function(){emit (this.brand,this.specification.RAM)};
+> var redf = function(key,values) {return Array.sum(values)};
+> db.mobile.mapReduce(mapf,redf,{'out' : 'Result_ram'});
+{ "result" : "Result_ram", "ok" : 1 }
+> db.Result_ram.find();
+{ "_id" : "One Plus", "value" : 8 }
+{ "_id" : "Samsung", "value" : 18 }
+{ "_id" : "Nokia", "value" : 1 }
+{ "_id" : "Real Me", "value" : 10 }
+{ "_id" : "Nothing", "value" : 8 }
+{ "_id" : "Google", "value" : 6 }
+{ "_id" : "Apple", "value" : 12 }
+{ "_id" : "Motorola", "value" : 6 }

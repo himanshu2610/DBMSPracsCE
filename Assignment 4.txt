@@ -1,0 +1,69 @@
+mysql> delimiter //
+mysql> create procedure CalCircleArea(IN rad float)
+    -> begin
+    -> declare radiusBound condition for sqlstate '45000';
+    -> if(rad>9 || rad<5)
+    -> then
+    -> signal sqlstate '45000' set message_text = 'radius is not between 5 and 9';
+    -> else insert into AreaCircle values(rad, 3.14*rad*rad);
+    -> end if;
+    -> end//
+mysql> delimiter ;
+
+
+
+
+
+
+mysql> create procedure calArea(in rad float)
+    -> begin
+    -> declare r float;
+    -> declare speciality condition for sqlstate '45000';
+    -> set r := rad;
+    -> if (r>10) then signal sqlstate '45000'
+    -> set message_text = "Enter the value of radius below 11";
+    -> end if;
+    -> lbl : LOOP
+    -> insert into displayArea values (r , PI()*r*r);
+    -> set r := r + 1;
+    -> if (r > 10) then
+    -> LEAVE lbl;
+    -> end if;
+    -> end LOOP ;
+    -> end;
+    -> @@
+Query OK, 0 rows affected (0.04 sec)
+
+
+mysql> create procedure calculateFine (in roll int, in bname varchar(55))
+    -> begin
+    -> declare speciality condition for sqlstate '45000';
+    -> declare v1 date;
+    -> declare v2 int;
+    -> declare bookn varchar(55);
+    -> declare stat varchar(55);
+    -> select book_name into bookn from borrower where roll_no = roll;
+    -> if(bookn <> bname) then signal sqlstate '45000'
+    -> set message_text = "Enter the correct book";
+    -> end if;
+    -> select status into stat from borrower where roll_no = roll;
+    -> if (stat = "RETURNED") then signal sqlstate '45000'
+    -> set message_text = "This book has already been returned";
+    -> end if;
+    -> select DateOfIssue into v1 from borrower where roll_no = roll;
+    -> set v2 := datediff(curdate(),v1);
+    -> if v2<1 then signal sqlstate '45000'
+    -> set message_text = "Enter a valid date";
+    -> end if;
+    -> if (v2>=15 && v2 <=30) then
+    -> insert into fine values (roll,curdate(),(v2-15)*5);
+    -> elseif v2 > 30 then
+    -> insert into fine values (roll,curdate(),(v2-30)*50);
+    -> else
+    -> insert into fine values (roll,curdate(),0);
+    -> end if;
+    -> update borrower set status = "RETURNED" where roll_no = roll;
+    -> select concat ("Task Completed");
+    -> end;
+    -> @@
+Query OK, 0 rows affected, 1 warning (0.03 sec)

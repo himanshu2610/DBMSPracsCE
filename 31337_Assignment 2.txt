@@ -1,0 +1,334 @@
+#PROBLEM STATEMENT :
+ 
+Create following tables in MYSQL
+Employee( Emp_id, Dept_id, fname, lname, designation, salary,JoinDate)
+Dept ( Dept_id, dname,dlocation )
+Project( Proj_id,Dept_id ,Pname,Plocation,Pcost,Pyear)
+Create view, index, sequence and synonym based on above tables.
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------SIMPLE VIEW----------------------------------------------------------------------------
+
+~CREATION OF SIMPLE VIEW : 
+
+mysql> create view v1 as select Emp_id,fname,lname,designation from Employee with check option;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> select * from v1;
++--------+-----------+-----------+-------------+
+| Emp_id | fname     | lname     | designation |
++--------+-----------+-----------+-------------+
+|      1 | Aditi     | Mojidra   | devloper    |
+|      2 | Prachi    | Pol       | Tester      |
+|      3 | Sneha     | Salunke   | Manager     |
+|      4 | Prerna    | Maindarge | Analyzer    |
+|      5 | Sanhita   | Kulkarni  | GenManager  |
+|      6 | Kareena   | Manghani  | ProbSetter  |
+|      7 | Sakshi    | Rathi     | MarketHead  |
+|      8 | Vaishnavi | Raut      | Manager     |
+|      9 | Pranita   | Deshmukh  | TechHead    |
+|     10 | Nikita    | Kulkarni  | Devloper    |
+|     11 | Hindavi   | Shinde    | Tester      |
++--------+-----------+-----------+-------------+
+11 rows in set (0.01 sec)
+
+~INSERT INTO SIMPLE VIEW:
+
+mysql> insert into Employee values(12,1,'Shraddha','Ashtekar','Dept Head',3200000,'2015-08-18');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from v1;
++--------+-----------+-----------+-------------+
+| Emp_id | fname     | lname     | designation |
++--------+-----------+-----------+-------------+
+|      1 | Aditi     | Mojidra   | devloper    |
+|      2 | Prachi    | Pol       | Tester      |
+|      3 | Sneha     | Salunke   | Manager     |
+|      4 | Prerna    | Maindarge | Analyzer    |
+|      5 | Sanhita   | Kulkarni  | GenManager  |
+|      6 | Kareena   | Manghani  | ProbSetter  |
+|      7 | Sakshi    | Rathi     | MarketHead  |
+|      8 | Vaishnavi | Raut      | Manager     |
+|      9 | Pranita   | Deshmukh  | TechHead    |
+|     10 | Nikita    | Kulkarni  | Devloper    |
+|     11 | Hindavi   | Shinde    | Tester      |
+|     12 | Shraddha  | Ashtekar  | Dept Head   |
++--------+-----------+-----------+-------------+
+12 rows in set (0.00 sec)
+
+mysql> insert into v1 values(13,'Disha','Dixit','Manager');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from v1;
++--------+-----------+-----------+-------------+
+| Emp_id | fname     | lname     | designation |
++--------+-----------+-----------+-------------+
+|      1 | Aditi     | Mojidra   | devloper    |
+|      2 | Prachi    | Pol       | Tester      |
+|      3 | Sneha     | Salunke   | Manager     |
+|      4 | Prerna    | Maindarge | Analyzer    |
+|      5 | Sanhita   | Kulkarni  | GenManager  |
+|      6 | Kareena   | Manghani  | ProbSetter  |
+|      7 | Sakshi    | Rathi     | MarketHead  |
+|      8 | Vaishnavi | Raut      | Manager     |
+|      9 | Pranita   | Deshmukh  | TechHead    |
+|     10 | Nikita    | Kulkarni  | Devloper    |
+|     11 | Hindavi   | Shinde    | Tester      |
+|     12 | Shraddha  | Ashtekar  | Dept Head   |
+|     13 | Disha     | Dixit     | Manager     |
++--------+-----------+-----------+-------------+
+13 rows in set (0.00 sec)
+
+~UPDATE INTO SIMPLE VIEW: 
+
+mysql> update v1 set designation='HOD' where Emp_id = 13;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from v1;
++--------+-----------+-----------+-------------+
+| Emp_id | fname     | lname     | designation |
++--------+-----------+-----------+-------------+
+|      1 | Aditi     | Mojidra   | devloper    |
+|      2 | Prachi    | Pol       | Tester      |
+|      3 | Sneha     | Salunke   | Manager     |
+|      4 | Prerna    | Maindarge | Analyzer    |
+|      5 | Sanhita   | Kulkarni  | GenManager  |
+|      6 | Kareena   | Manghani  | ProbSetter  |
+|      7 | Sakshi    | Rathi     | MarketHead  |
+|      8 | Vaishnavi | Raut      | Manager     |
+|      9 | Pranita   | Deshmukh  | TechHead    |
+|     10 | Nikita    | Kulkarni  | Devloper    |
+|     11 | Hindavi   | Shinde    | Tester      |
+|     12 | Shraddha  | Ashtekar  | Dept Head   |
+|     13 | Disha     | Dixit     | HOD         |
++--------+-----------+-----------+-------------+
+13 rows in set (0.00 sec)
+
+~DELETE FROM SIMPLE VIEW : 
+
+mysql> delete from v1 where Emp_id = 13;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from v1;
++--------+-----------+-----------+-------------+
+| Emp_id | fname     | lname     | designation |
++--------+-----------+-----------+-------------+
+|      1 | Aditi     | Mojidra   | devloper    |
+|      2 | Prachi    | Pol       | Tester      |
+|      3 | Sneha     | Salunke   | Manager     |
+|      4 | Prerna    | Maindarge | Analyzer    |
+|      5 | Sanhita   | Kulkarni  | GenManager  |
+|      6 | Kareena   | Manghani  | ProbSetter  |
+|      7 | Sakshi    | Rathi     | MarketHead  |
+|      8 | Vaishnavi | Raut      | Manager     |
+|      9 | Pranita   | Deshmukh  | TechHead    |
+|     10 | Nikita    | Kulkarni  | Devloper    |
+|     11 | Hindavi   | Shinde    | Tester      |
+|     12 | Shraddha  | Ashtekar  | Dept Head   |
++--------+-----------+-----------+-------------+
+12 rows in set (0.00 sec)
+
+
+-----------------------------------------------COMPLEX VIEW-------------------------------------------------------------------------------
+
+~CREATION OF COMPLEX VIEW : 
+
+mysql> create view v2 as select e.emp_id,e.dept_id,e.fname,e.lname,d.dname,d.dlocation from Employee e inner join Dept d on e.Dept_id = d.Dept
+_id;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from v2;
++--------+---------+-----------+-----------+----------+-----------+
+| emp_id | dept_id | fname     | lname     | dname    | dlocation |
++--------+---------+-----------+-----------+----------+-----------+
+|      3 |       1 | Sneha     | Salunke   | Computer | Banglore  |
+|      4 |       1 | Prerna    | Maindarge | Computer | Banglore  |
+|      9 |       1 | Pranita   | Deshmukh  | Computer | Banglore  |
+|     12 |       1 | Shraddha  | Ashtekar  | Computer | Banglore  |
+|      1 |       2 | Aditi     | Mojidra   | IT       | Mumbai    |
+|      5 |       2 | Sanhita   | Kulkarni  | IT       | Mumbai    |
+|      6 |       2 | Kareena   | Manghani  | IT       | Mumbai    |
+|      8 |       2 | Vaishnavi | Raut      | IT       | Mumbai    |
+|     10 |       2 | Nikita    | Kulkarni  | IT       | Mumbai    |
+|     11 |       2 | Hindavi   | Shinde    | IT       | Mumbai    |
+|      2 |       3 | Prachi    | Pol       | ENTC     | Pune      |
+|      7 |       3 | Sakshi    | Rathi     | ENTC     | Pune      |
++--------+---------+-----------+-----------+----------+-----------+
+12 rows in set (0.00 sec)
+
+
+
+---------------------------------------------------------SIMPLE INDEX---------------------------------------------------------------------
+
+mysql> create index empind on Employee(Emp_id);
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> show index from Employee;
++----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table    | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Employee |          0 | PRIMARY  |            1 | Emp_id      | A         |          13 |     NULL | NULL   |      | BTREE      |         |               |
+| Employee |          1 | Dept_id  |            1 | Dept_id     | A         |           6 |     NULL | NULL   | YES  | BTREE      |         |               |
+| Employee |          1 | empind   |            1 | Emp_id      | A         |          13 |     NULL | NULL   |      | BTREE      |         |               |
++----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+3 rows in set (0.01 sec)
+
+
+mysql> select * from Employee order by Emp_id desc;
++--------+---------+-----------+-----------+-------------+---------+------------+
+| Emp_id | Dept_id | fname     | lname     | designation | salary  | JoinDate   |
++--------+---------+-----------+-----------+-------------+---------+------------+
+|     13 |       3 | Disha     | Dixit     | HOD         | 328999  | 2017-08-15 |
+|     12 |       1 | Shraddha  | Ashtekar  | Dept Head   | 3200000 | 2015-08-18 |
+|     11 |       2 | Hindavi   | Shinde    | Tester      | 123343  | 2016-06-12 |
+|     10 |       2 | Nikita    | Kulkarni  | Devloper    | 145200  | 2012-12-12 |
+|      9 |       1 | Pranita   | Deshmukh  | TechHead    | 207900  | 2014-12-10 |
+|      8 |       2 | Vaishnavi | Raut      | Manager     | 156200  | 2014-11-10 |
+|      7 |       3 | Sakshi    | Rathi     | MarketHead  | 146000  | 2017-11-10 |
+|      6 |       2 | Kareena   | Manghani  | ProbSetter  | 156000  | 2016-09-28 |
+|      5 |       2 | Sanhita   | Kulkarni  | GenManager  | 184000  | 2015-08-18 |
+|      4 |       1 | Prerna    | Maindarge | Analyzer    | 290400  | 2014-08-18 |
+|      3 |       1 | Sneha     | Salunke   | Manager     | 147400  | 2014-05-23 |
+|      2 |       3 | Prachi    | Pol       | Tester      | 104000  | 2043-05-03 |
+|      1 |       2 | Aditi     | Mojidra   | devloper    | 110000  | 2013-03-03 |
++--------+---------+-----------+-----------+-------------+---------+------------+
+13 rows in set (0.01 sec)
+
+mysql> select * from Employee where Emp_id < 6;
++--------+---------+---------+-----------+-------------+--------+------------+
+| Emp_id | Dept_id | fname   | lname     | designation | salary | JoinDate   |
++--------+---------+---------+-----------+-------------+--------+------------+
+|      1 |       2 | Aditi   | Mojidra   | devloper    | 110000 | 2013-03-03 |
+|      2 |       3 | Prachi  | Pol       | Tester      | 104000 | 2043-05-03 |
+|      3 |       1 | Sneha   | Salunke   | Manager     | 147400 | 2014-05-23 |
+|      4 |       1 | Prerna  | Maindarge | Analyzer    | 290400 | 2014-08-18 |
+|      5 |       2 | Sanhita | Kulkarni  | GenManager  | 184000 | 2015-08-18 |
++--------+---------+---------+-----------+-------------+--------+------------+
+5 rows in set (0.00 sec)
+
+
+-------------------------------------------------------UNIQUE INDEX-----------------------------------------------------------------------
+
+mysql> create unique index nameind on Employee(fname);
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> show index from Employee;
++----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table    | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Employee |          0 | PRIMARY  |            1 | Emp_id      | A         |          13 |     NULL | NULL   |      | BTREE      |         |               |
+| Employee |          0 | nameind  |            1 | fname       | A         |          13 |     NULL | NULL   | YES  | BTREE      |         |               |
+| Employee |          1 | Dept_id  |            1 | Dept_id     | A         |           6 |     NULL | NULL   | YES  | BTREE      |         |               |
+| Employee |          1 | empind   |            1 | Emp_id      | A         |          13 |     NULL | NULL   |      | BTREE      |         |               |
++----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+4 rows in set (0.00 sec)
+
+
+mymysql> select * from Employee order by fname desc;
++--------+---------+-----------+-----------+-------------+---------+------------+
+| Emp_id | Dept_id | fname     | lname     | designation | salary  | JoinDate   |
++--------+---------+-----------+-----------+-------------+---------+------------+
+|      8 |       2 | Vaishnavi | Raut      | Manager     | 156200  | 2014-11-10 |
+|      3 |       1 | Sneha     | Salunke   | Manager     | 147400  | 2014-05-23 |
+|     12 |       1 | Shraddha  | Ashtekar  | Dept Head   | 3200000 | 2015-08-18 |
+|      5 |       2 | Sanhita   | Kulkarni  | GenManager  | 184000  | 2015-08-18 |
+|      7 |       3 | Sakshi    | Rathi     | MarketHead  | 146000  | 2017-11-10 |
+|      4 |       1 | Prerna    | Maindarge | Analyzer    | 290400  | 2014-08-18 |
+|      9 |       1 | Pranita   | Deshmukh  | TechHead    | 207900  | 2014-12-10 |
+|      2 |       3 | Prachi    | Pol       | Tester      | 104000  | 2043-05-03 |
+|     10 |       2 | Nikita    | Kulkarni  | Devloper    | 145200  | 2012-12-12 |
+|      6 |       2 | Kareena   | Manghani  | ProbSetter  | 156000  | 2016-09-28 |
+|     11 |       2 | Hindavi   | Shinde    | Tester      | 123343  | 2016-06-12 |
+|     13 |       3 | Disha     | Dixit     | HOD         | 328999  | 2017-08-15 |
+|      1 |       2 | Aditi     | Mojidra   | devloper    | 110000  | 2013-03-03 |
++--------+---------+-----------+-----------+-------------+---------+------------+
+13 rows in set (0.00 sec)
+
+
+mysql> explain select fname from Employee;
++------+-------------+----------+-------+---------------+---------+---------+------+------+-------------+
+| id   | select_type | table    | type  | possible_keys | key     | key_len | ref  | rows | Extra       |
++------+-------------+----------+-------+---------------+---------+---------+------+------+-------------+
+|    1 | SIMPLE      | Employee | index | NULL          | nameind | 13      | NULL |   13 | Using index |
++------+-------------+----------+-------+---------------+---------+---------+------+------+-------------+
+1 row in set (0.01 sec)
+
+-------------------------------------------------------COMPOSITE INDEX--------------------------------------------------------------------
+
+mysql> create index indemp on Employee(Emp_id,Dept_id,fname);
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> show index from Employee;
++----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table    | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Employee |          0 | PRIMARY  |            1 | Emp_id      | A         |          13 |     NULL | NULL   |      | BTREE      |         |               |
+| Employee |          0 | nameind  |            1 | fname       | A         |          13 |     NULL | NULL   | YES  | BTREE      |         |               |
+| Employee |          1 | Dept_id  |            1 | Dept_id     | A         |           6 |     NULL | NULL   | YES  | BTREE      |         |               |
+| Employee |          1 | empind   |            1 | Emp_id      | A         |          13 |     NULL | NULL   |      | BTREE      |         |               |
+| Employee |          1 | indemp   |            1 | Emp_id      | A         |          13 |     NULL | NULL   |      | BTREE      |         |               |
+| Employee |          1 | indemp   |            2 | Dept_id     | A         |          13 |     NULL | NULL   | YES  | BTREE      |         |               |
+| Employee |          1 | indemp   |            3 | fname       | A         |          13 |     NULL | NULL   | YES  | BTREE      |         |               |
++----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+7 rows in set (0.00 sec)
+
+mysql> select * from Employee where Dept_id = 2 or Emp_id = 5;
++--------+---------+-----------+----------+-------------+--------+------------+
+| Emp_id | Dept_id | fname     | lname    | designation | salary | JoinDate   |
++--------+---------+-----------+----------+-------------+--------+------------+
+|      1 |       2 | Aditi     | Mojidra  | devloper    | 110000 | 2013-03-03 |
+|      5 |       2 | Sanhita   | Kulkarni | GenManager  | 184000 | 2015-08-18 |
+|      6 |       2 | Kareena   | Manghani | ProbSetter  | 156000 | 2016-09-28 |
+|      8 |       2 | Vaishnavi | Raut     | Manager     | 156200 | 2014-11-10 |
+|     10 |       2 | Nikita    | Kulkarni | Devloper    | 145200 | 2012-12-12 |
+|     11 |       2 | Hindavi   | Shinde   | Tester      | 123343 | 2016-06-12 |
++--------+---------+-----------+----------+-------------+--------+------------+
+6 rows in set (0.00 sec)
+
+mysql> explain select Emp_id,Dept_id,fname from Employee;
++------+-------------+----------+-------+---------------+--------+---------+------+------+-------------+
+| id   | select_type | table    | type  | possible_keys | key    | key_len | ref  | rows | Extra       |
++------+-------------+----------+-------+---------------+--------+---------+------+------+-------------+
+|    1 | SIMPLE      | Employee | index | NULL          | indemp | 22      | NULL |   13 | Using index |
++------+-------------+----------+-------+---------------+--------+---------+------+------+-------------+
+1 row in set (0.00 sec)
+
+-----------------------------------------------------------SEQUENCE-----------------------------------------------------------------------
+
+mysql> create table Emp1 (Emp_id int not null auto_increment,fname varchar(10),lname varchar(10) not null,primary key(Emp_id));
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> insert into Emp1(fname,lname) values ('Prerna','Maindarge');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Emp1(fname,lname) values ('Shraddha','Ashtekar');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Emp1(fname,lname) values ('Prathmesh','Kulkarni');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Emp1(fname,lname) values ('Disha','Dixit');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Emp1(fname,lname) values ('Anuj','Gaike');
+Query OK, 1 row affected (0.08 sec)
+
+mysql> select * from Emp1;
++--------+-----------+-----------+
+| Emp_id | fname     | lname     |
++--------+-----------+-----------+
+|      1 | Prerna    | Maindarge |
+|      2 | Shraddha  | Ashtekar  |
+|      3 | Prathmesh | Kulkarni  |
+|      4 | Disha     | Dixit     |
+|      5 | Anuj      | Gaike     |
++--------+-----------+-----------+
+5 rows in set (0.00 sec)
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
